@@ -1,28 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather Widget</title>
-  <link rel="stylesheet" href="css/style.css">
-  <!-- FontAwesome CDN -->
- 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard Pro</title>
+    <!-- Add Fontawesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.light {
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        body.dark {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        .navbar {
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar.light {
+            background: white;
+        }
+
+        .navbar.dark {
+            background: #1e293b;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .search-card {
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-card.light {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .search-card.dark {
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 12px 12px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-input.light {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .search-input.dark {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .search-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-button.light {
+            background: #0ea5e9;
+            color: white;
+        }
+
+        .search-button.dark {
+            background: #0284c7;
+            color: white;
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .recent-searches {
+            margin-top: 1rem;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .recent-chip {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .recent-chip.light {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .recent-chip.dark {
+            background: #475569;
+            color: #e2e8f0;
+        }
+
+        .recent-chip:hover {
+            transform: translateY(-2px);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        footer.light {
+            background: white;
+            color: #64748b;
+        }
+
+        footer.dark {
+            background: #1e293b;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+                margin: 20px auto;
+            }
+            .container button{
+                width: fit-content;
+                /* justify-content: center; */
+                
+            }
+            .fa-search{
+                display: none;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="light">
+    <nav class="navbar light">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1><i class="fas fa-cloud-sun"></i> WeatherPro</h1>
+                <button onclick="toggleTheme()" id="themeToggle" class="search-button light" style="padding: 8px 16px;">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-      <div style="display: flex; align-items: center; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; padding: 5px; width: fit-content; background-color: rgba(0, 132, 255, 0.275);">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-          <path d="M10 20v-6h4v6a1 1 0 001 1h3a1 1 0 001-1v-7h2.293a1 1 0 00.707-1.707l-8-8a1 1 0 00-1.414 0l-8 8A1 1 0 003.707 13H6v7a1 1 0 001 1h3a1 1 0 001-1z"/>
-        </svg>
-        <a style="margin-left: 5px; text-decoration: none;color: white;" href="https://yashrajsingh-dusky.vercel.app/">Home</a>
-      </div>
-        <div class="inner-container">
-            <h1>Weather Widget</h1>
-            <city-weather city="Los Angeles"></city-weather>
+        <div class="search-card light">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input 
+                    type="text" 
+                    id="citySearch" 
+                    class="search-input light" 
+                    placeholder="Search for a city..."
+                    autocomplete="off"
+                >
+                <button onclick="searchCity()" class="search-button light">
+                    Search
+                </button>
+            </div>
+            <div class="recent-searches">
+                <span class="recent-chip light" onclick="searchForCity('Hyderabad')">Hyderabad</span>
+                <span class="recent-chip light" onclick="searchForCity('London')">London</span>
+                <span class="recent-chip light" onclick="searchForCity('New York')">New York</span>
+                <span class="recent-chip light" onclick="searchForCity('Tokyo')">Tokyo</span>
+            </div>
         </div>
 
-        
+        <!-- Weather Widget -->
+        <city-weather id="mainWeather" city="New York"></city-weather>
     </div>
-  <script type="module" src="js/app.js"></script>
+
+    <footer class="light">
+        <p>WeatherPro Dashboard • Powered by OpenWeather API</p>
+    </footer>
+
+    <script type="module" src="./js/weather-widget.js"></script>
+    <script>
+        // Store recent searches
+        let recentSearches = new Set(['London', 'New York', 'Tokyo']);
+
+        function updatePageTheme(theme) {
+            document.body.className = theme;
+            document.querySelector('.navbar').className = `navbar ${theme}`;
+            document.querySelector('.search-card').className = `search-card ${theme}`;
+            document.querySelector('.search-input').className = `search-input ${theme}`;
+            document.querySelector('.search-button').className = `search-button ${theme}`;
+            document.querySelectorAll('.recent-chip').forEach(chip => {
+                chip.className = `recent-chip ${theme}`;
+            });
+            document.querySelector('footer').className = theme;
+            
+            // Update theme toggle icon
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.innerHTML = theme === 'light' ? 
+                '<i class="fas fa-moon"></i>' : 
+                '<i class="fas fa-sun"></i>';
+        }
+
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('weatherTheme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('weatherTheme', newTheme);
+            updatePageTheme(newTheme);
+        }
+
+        function searchCity() {
+            const cityInput = document.getElementById('citySearch');
+            const city = cityInput.value.trim();
+            
+            if (city) {
+                document.getElementById('mainWeather').setAttribute('city', city);
+                addToRecentSearches(city);
+                cityInput.value = '';
+            }
+        }
+
+        function searchForCity(city) {
+            document.getElementById('mainWeather').setAttribute('city', city);
+            document.getElementById('citySearch').value = '';
+        }
+
+        function addToRecentSearches(city) {
+            recentSearches.delete(city); // Remove if exists
+            recentSearches.add(city); // Add to recent
+            
+            // Keep only last 5 searches
+            recentSearches = new Set([...Array.from(recentSearches)].slice(-5));
+            
+            updateRecentSearches();
+        }
+
+        function updateRecentSearches() {
+            const container = document.querySelector('.recent-searches');
+            container.innerHTML = '';
+            
+            recentSearches.forEach(city => {
+                const chip = document.createElement('span');
+                chip.className = `recent-chip ${localStorage.getItem('weatherTheme') || 'light'}`;
+                chip.onclick = () => searchForCity(city);
+                chip.textContent = city;
+                container.appendChild(chip);
+            });
+        }
+
+        // Initial theme setup
+        updatePageTheme(localStorage.getItem('weatherTheme') || 'light');
+
+        // Add enter key support for search
+        document.getElementById('citySearch').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchCity();
+            }
+        });
+
+        // Listen for theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'weatherTheme') {
+                updatePageTheme(e.newValue);
+            }
+        });
+    </script>
 </body>
 </html>
